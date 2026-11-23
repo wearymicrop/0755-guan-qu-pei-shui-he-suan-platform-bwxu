@@ -1,0 +1,42 @@
+{
+  "config": {
+    "start": "2026-11-23T08:00:00+08:00",
+    "end": "2026-11-23T12:00:00+08:00",
+    "batch": "LG-1123-01",
+    "root": "总干渠",
+    "supply": "18.5",
+    "unit": "m³",
+    "quantum_l": 100
+  },
+  "channels": [
+    {"channel": "总干渠", "parent": null, "inflow": "18.5", "loss": "0.8", "unit": "m³"},
+    {"channel": "东支渠", "parent": "总干渠", "inflow": "6.0", "loss": "0.3", "unit": "m³"},
+    {"channel": "西支渠", "parent": "总干渠", "inflow": "5.0", "loss": "0.5", "unit": "m³"},
+    {"channel": "北斗渠", "parent": "东支渠", "inflow": "2.4", "loss": "0.1", "unit": "m³"},
+    {"channel": "苗圃渠", "parent": "西支渠", "inflow": "1.4", "loss": "0.1", "unit": "m³"}
+  ],
+  "gates": [
+    {"channel": "总干渠", "start": "2026-11-23T08:00:00+08:00", "end": "2026-11-23T12:00:00+08:00", "state": "open"},
+    {"channel": "东支渠", "start": "2026-11-23T08:00:00+08:00", "end": "2026-11-23T12:00:00+08:00", "state": "open"},
+    {"channel": "西支渠", "start": "2026-11-23T08:00:00+08:00", "end": "2026-11-23T12:00:00+08:00", "state": "open"},
+    {"channel": "北斗渠", "start": "2026-11-23T08:00:00+08:00", "end": "2026-11-23T12:00:00+08:00", "state": "open"},
+    {"channel": "苗圃渠", "start": "2026-11-23T08:00:00+08:00", "end": "2026-11-23T12:00:00+08:00", "state": "open"}
+  ],
+  "rights": [
+    {"outlet": "101", "channel": "总干渠", "version": "2026-B", "start": "2026-11-23T08:00:00+08:00", "end": "2026-11-23T12:00:00+08:00", "minimum": "1", "ceiling": "4", "unit": "m³", "priority": 1, "weight": 1},
+    {"outlet": "201", "channel": "东支渠", "version": "2026-B", "start": "2026-11-23T08:00:00+08:00", "end": "2026-11-23T12:00:00+08:00", "minimum": "1", "ceiling": "4", "unit": "m³", "priority": 1, "weight": 1},
+    {"outlet": "202", "channel": "东支渠", "version": "2026-B", "start": "2026-11-23T08:00:00+08:00", "end": "2026-11-23T12:00:00+08:00", "minimum": "1", "ceiling": "4", "unit": "m³", "priority": 1, "weight": 1},
+    {"outlet": "301", "channel": "西支渠", "version": "2026-B", "start": "2026-11-23T08:00:00+08:00", "end": "2026-11-23T12:00:00+08:00", "minimum": "1", "ceiling": "3", "unit": "m³", "priority": 1, "weight": 1},
+    {"outlet": "302", "channel": "西支渠", "version": "2026-B", "start": "2026-11-23T08:00:00+08:00", "end": "2026-11-23T12:00:00+08:00", "minimum": "0.8", "ceiling": "2", "unit": "m³", "priority": 1, "weight": 1},
+    {"outlet": "401", "channel": "北斗渠", "version": "2026-B", "start": "2026-11-23T08:00:00+08:00", "end": "2026-11-23T12:00:00+08:00", "minimum": "0.5", "ceiling": "2", "unit": "m³", "priority": 1, "weight": 1},
+    {"outlet": "501", "channel": "苗圃渠", "version": "2026-B", "start": "2026-11-23T08:00:00+08:00", "end": "2026-11-23T12:00:00+08:00", "minimum": "0.4", "ceiling": "1.2", "unit": "m³", "priority": 1, "weight": 1}
+  ],
+  "sources": [
+    {"source": "R1再生水厂", "kind": "reclaimed", "channel": "总干渠", "offered": "5", "unit": "m³"},
+    {"source": "R2再生水厂", "kind": "reclaimed", "channel": "东支渠", "offered": "2", "unit": "m³"}
+  ],
+  "restrictions": [
+    {"outlet": "302", "purpose": "饮水池"},
+    {"outlet": "501", "purpose": "果园"}
+  ]
+}

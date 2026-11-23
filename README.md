@@ -6,7 +6,7 @@
 docker compose up --build
 ```
 
-访问 `http://127.0.0.1:18449`，先看尾量调平，再点取水权版本和渠道损耗复核来源。脏样例有交叠权证和分支闸门冲突，回执保持待审。`docker compose exec -T app pytest -q` 运行测试。默认命名卷 `records` 保存归档，宿主变量 `DB_PATH` 可指定 SQLite 文件。宿主运行可先安装 `requirements.txt`，再执行 `uvicorn app.main:app --port 18449`。
+访问 `http://127.0.0.1:18449`，先看尾量调平，再点取水权版本和渠道损耗复核来源。脏样例有交叠权证和分支闸门冲突，回执保持待审。双源收紧样例（`dual`）在「双源汇流」页裁决再生水厂能否补水：注入口下游含果园、饮水池时缓注保供（方案B），其余渠段立即补水替代清水（方案A），并按清水/再生水两套账逐口、逐段、逐余量勾稽。`docker compose exec -T app pytest -q` 运行测试。默认命名卷 `records` 保存归档，宿主变量 `DB_PATH` 可指定 SQLite 文件。宿主运行可先安装 `requirements.txt`，再执行 `uvicorn app.main:app --port 18449`。
 
 - [计算顺序、七个模块与陷阱](docs/DEPTH.md)
 - [数据字典](docs/DATA-DICTIONARY.md)

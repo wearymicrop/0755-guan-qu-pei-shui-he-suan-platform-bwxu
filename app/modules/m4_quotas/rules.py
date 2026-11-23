@@ -47,11 +47,20 @@ def allocate(rights, available, quantum):
     return targets
 
 
-def run(_data, previous):
+def run(data, previous):
+    data = data or {}
     quantum = previous["batches"]["quantum_l"]
-    channels = {r["channel"]: r["usable_l"] for r in previous["channels"]["channels"]}
+    if data.get("sources") or data.get("restrictions"):
+        source_stage = previous["sources"]
+        channels = {s["channel"]: s["usable_l"] for s in source_stage["sections"]}
+        blocked = {row["outlet"] for row in source_stage["blocked_outlets"]}
+    else:
+        channels = {r["channel"]: r["usable_l"] for r in previous["channels"]["channels"]}
+        blocked = set()
     by_channel, issues = defaultdict(list), []
     for row in previous["rights"]["active"]:
+        if row["outlet"] in blocked:
+            continue
         if row["channel"] in channels:
             by_channel[row["channel"]].append(row)
         else:

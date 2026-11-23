@@ -1,3 +1,12 @@
 {% from 'table.jinja' import ledger %}
-<div class="panel-head"><h2>轮灌回执</h2><small>{{ current.receipt_l }} L · {{ '可下发' if current.state=='ready' else '暂停下发' }}</small></div>
-{{ ledger(current.receipts,[('回执号','receipt',''),('渠段','channel',''),('斗口','outlet',''),('实配 L','allocated_l','num')]) }}
+<div class="panel-head"><h2>轮灌回执</h2><small>{{ current.receipt_l }} L（清水 {{ current.receipt_fresh_l }} · 再生水 {{ current.receipt_reclaimed_l }}）· {{ '可下发' if current.state=='ready' else '暂停下发' }}</small></div>
+{{ ledger(current.receipts,[('回执号','receipt',''),('渠段','channel',''),('斗口','outlet',''),('实配 L','allocated_l','num'),('清水 L','fresh_l','num'),('再生水 L','reclaimed_l','num')]) }}
+{% if current.receipts %}
+<div class="panel-head"><h2>实配确认</h2><small>按斗口逐条确认，重复提交不累加、不改派</small></div>
+<div class="confirm-box" id="confirm-box">
+  <label>斗口 <select id="confirm-outlet">{% for r in current.receipts %}<option value="{{ r.outlet }}" data-amount="{{ r.allocated_l }}">{{ r.outlet }} · {{ r.allocated_l }} L</option>{% endfor %}</select></label>
+  <button type="button" id="confirm-btn">确认实配</button>
+  <p id="confirm-status" role="status"></p>
+  <ul id="confirm-list"></ul>
+</div>
+{% endif %}

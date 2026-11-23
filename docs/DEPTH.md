@@ -11,6 +11,7 @@
 | M1 轮灌批次 | 核验当轮闸令 | `GET /api/batches/{sample}` | `app/modules/m1_batches/rules.py` | `tests/test_batches.py` |
 | M2 取水权版本 | 裁决斗口有效权证 | `GET /api/rights/{sample}` | `app/modules/m2_rights/rules.py` | `tests/test_rights.py` |
 | M3 渠道损耗 | 核对实测分流和渠损 | `GET /api/channels/{sample}` | `app/modules/m3_channels/rules.py` | `tests/test_channels.py` |
+| M8 双源汇流 | 裁决再生水准入并拆双源账 | `GET /api/sources/{sample}` | `app/modules/m8_sources/rules.py` | `tests/test_sources.py`、`tests/test_guardrail.py` |
 | M4 优先级配额 | 核算保底与权重配额 | `GET /api/quotas/{sample}` | `app/modules/m4_quotas/rules.py` | `tests/test_quotas.py` |
 | M5 尾量调平 | 分派最小水量单位 | `GET /api/tail/{sample}` | `app/modules/m5_tail/rules.py` | `tests/test_tail.py` |
 | M6 斗口勾稽 | 比对供水、损耗、实配与剩余 | `GET /api/balance/{sample}` | `app/modules/m6_balance/rules.py` | `tests/test_balance.py` |
@@ -29,10 +30,15 @@
 | TRAP-23 | 干净样例：权证在批次开始失效 | 两版均生效 | 采用半开区间 | `app/modules/m2_rights/rules.py` | `tests/test_rights.py::test_end_exclusive` |
 | TRAP-24 | 干净样例：斗口余数相同 | 逐行四舍五入超分 | 用最大余数守恒 | `app/modules/m5_tail/rules.py` | `tests/test_tail.py::test_largest_remainder` |
 | TRAP-25 | 脏样例：斗口活动权证重叠 | 取到哪个版本不确定 | 重叠版本同时隔离 | `app/modules/m2_rights/rules.py` | `tests/test_rights.py::test_overlap_right` |
+| TRAP-27 | 双源：再生水汇总干渠会波及下游果园/饮水池 | 见水就补，受限斗口接触再生水 | 按注入口受限子树裁决方案A/B，缓注留余量 | `app/modules/m8_sources/rules.py` | `tests/test_sources.py::test_plan_b_withholds_shared_main_canal` |
+| TRAP-28 | 双源：混合比例逐口四舍五入不守恒 | 再生水被整份集中到靠前斗口 | 段内最大余数拆分，清水补齐守恒 | `app/modules/m5_tail/rules.py` | `tests/test_sources.py::test_outlet_split_conservation` |
+| TRAP-29 | 双源：同来源变更重试 | 实配量重复累加或改派 | 幂等键绑定来源摘要，确认表主键去重 | `app/runs.py`、`app/store.py` | `tests/test_idempotency.py` |
 
 ## 对账规则
 
 渠首供水等于已核实渠损、斗口实配和所有本地余量。脏样例部分支渠受闸冲突隔离，未能核实的入流保留于上游余量供复核。各斗口及渠道均带原始行。
+
+双源轮次另按清水、再生水两套账勾稽：每段满足「入流+本段汇入 = 损耗+支渠取流+斗口实配+余量」，父子段支渠取流双向守恒；受限斗口再生水实配必须为零，否则硬护栏阻断下发。未启用的再生水申报量单列 `reclaimed_withheld_l`，不进入渠系也不计入损耗。
 
 ## 已知边界
 

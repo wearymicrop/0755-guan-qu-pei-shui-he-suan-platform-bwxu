@@ -1,0 +1,23 @@
+{% macro evidence_cell(row) %}
+<td>{% set refs = row.sources or ([row.source] if row.source else []) or ([row.evidence] if row.evidence else []) %}{% if refs %}<details><summary>{{ refs[0].table }} #{{ refs[0].line }}</summary>{% for src in refs %}<pre>{{ src.raw|tojson(indent=2) }}</pre>{% endfor %}</details>{% else %}—{% endif %}</td>
+{% endmacro %}
+<div class="panel-head"><div><h2>水源裁决</h2><small>方案A 立即补水替代清水 · 方案B 缓注保护受限斗口</small></div></div>
+<div class="scroll"><table><thead><tr><th>水源</th><th>类型</th><th>申请汇入</th><th>申报 L</th><th>准入 L</th><th>方案</th><th>裁决</th><th>原行</th></tr></thead>
+<tbody>{% for row in current.decisions %}<tr data-row>
+<td>{{ row.source }}</td><td>{{ row.kind }}</td><td>{{ row.channel }}</td>
+<td class="num">{{ row.offered_l }}</td><td class="num">{{ row.admitted_l }}</td><td>{{ row.plan }}</td><td>{{ row.state }}</td>
+{% set ref = row.evidence %}<td>{% if ref %}<details><summary>{{ ref.table }} #{{ ref.line }}</summary><pre>{{ ref.raw|tojson(indent=2) }}</pre></details>{% else %}—{% endif %}</td>
+</tr>{% else %}<tr><td colspan="8">暂无可核算记录。</td></tr>{% endfor %}</tbody></table></div>
+<div class="panel-head"><div><h2>受限斗口登记</h2><small>果园与饮水池全程不接触再生水</small></div></div>
+<div class="scroll"><table><thead><tr><th>斗口</th><th>受限用途</th><th>原行</th></tr></thead>
+<tbody>{% for row in current.restrictions %}<tr data-row>
+<td>{{ row.outlet }}</td><td>{{ row.purpose }}</td>
+{% set ref = row.source %}<td>{% if ref %}<details><summary>{{ ref.table }} #{{ ref.line }}</summary><pre>{{ ref.raw|tojson(indent=2) }}</pre></details>{% else %}—{% endif %}</td>
+</tr>{% else %}<tr><td colspan="3">暂无受限登记。</td></tr>{% endfor %}</tbody></table></div>
+<div class="panel-head"><div><h2>各段汇流水质与水量</h2><small>比例为再生水占本段可配水量</small></div></div>
+{% from 'table.jinja' import ledger %}
+{{ ledger(current.sections,[('渠段','channel',''),('清水入流 L','inflow_fresh_l','num'),('再生水入流 L','inflow_reclaimed_l','num'),('清水汇入 L','injected_fresh_l','num'),('再生水汇入 L','injected_reclaimed_l','num'),('清水损耗 L','loss_fresh_l','num'),('再生水损耗 L','loss_reclaimed_l','num'),('可配清水 L','usable_fresh_l','num'),('可配再生水 L','usable_reclaimed_l','num'),('再生水比例','reclaimed_ratio',''),('受限子树','subtree_restricted','')]) }}
+{% if current.blocked_outlets %}
+<div class="panel-head"><h2>阻断斗口</h2></div>
+{{ ledger(current.blocked_outlets,[('斗口','outlet',''),('渠段','channel',''),('用途','purpose','')]) }}
+{% endif %}

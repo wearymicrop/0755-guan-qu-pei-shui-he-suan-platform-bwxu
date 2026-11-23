@@ -1,3 +1,3 @@
 {% from 'table.jinja' import ledger %}
-<div class="panel-head"><h2>逐渠勾稽</h2><small>差额 {{ current.difference_l }} L</small></div>
-{{ ledger(current.ledgers,[('渠段','channel',''),('入流 L','inflow_l','num'),('损耗 L','loss_l','num'),('支渠取流 L','child_inflow_l','num'),('实配 L','allocated_l','num'),('未配 L','remainder_l','num')]) }}
+<div class="panel-head"><h2>逐渠勾稽</h2><small>差额 {{ current.difference_l }} L · 未启用再生水 {{ current.totals.reclaimed_withheld_l }} L</small></div>
+{{ ledger(current.ledgers,[('渠段','channel',''),('清水入流 L','inflow_fresh_l','num'),('再生水入流 L','inflow_reclaimed_l','num'),('再生水汇入 L','injected_reclaimed_l','num'),('清水损耗 L','loss_fresh_l','num'),('再生水损耗 L','loss_reclaimed_l','num'),('支渠清水 L','child_fresh_l','num'),('支渠再生水 L','child_reclaimed_l','num'),('实配清水 L','allocated_fresh_l','num'),('实配再生水 L','allocated_reclaimed_l','num'),('余量清水 L','remainder_fresh_l','num'),('余量再生水 L','remainder_reclaimed_l','num'),('再生水比例','reclaimed_ratio','')]) }}

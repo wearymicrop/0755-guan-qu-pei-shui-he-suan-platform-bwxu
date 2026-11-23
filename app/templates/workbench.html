@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ titles[stage] }} · {{ project }}</title>
 <link rel="stylesheet" href="/static/theme.css"><link rel="stylesheet" href="/static/layout.css"><link rel="stylesheet" href="/static/components.css">
-<script src="/static/controls.js" defer></script><script src="/static/filter.js" defer></script>
+<script src="/static/controls.js" defer></script><script src="/static/filter.js" defer></script><script src="/static/confirm.js" defer></script>
 </head>
 <body data-sample="{{ sample }}">
 <aside><a class="brand" href="/?sample={{ sample }}"><b>灌</b><span>{{ project }}</span></a>
@@ -14,7 +14,7 @@
 <header><div><p class="eyebrow">青禾灌区 / 轮灌台账</p><h1>{{ titles[stage] }}</h1></div><form id="controls"><label>数据来源 <select id="sample" name="sample">{% for id, label in samples.items() %}<option value="{{ id }}" {% if id==sample %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label><button>核算归档</button></form></header>
 {% set balance = result.balance %}
 <section class="kpis" aria-label="水量汇总">
-{% for label, value in [('渠首供水',balance.supply_l),('核定渠损',balance.loss_l),('斗口实配',balance.allocated_l),('剩余水量',balance.remaining_l)] %}<div><span>{{ label }}</span><strong>{{ '{:,}'.format(value) }} <small>L</small></strong></div>{% endfor %}
+{% for label, value in [('渠首清水',balance.supply_l),('再生水准入',balance.totals.reclaimed_admitted_l),('斗口实配',balance.allocated_l),('替代清水',balance.totals.fresh_saved_l)] %}<div><span>{{ label }}</span><strong>{{ '{:,}'.format(value) }} <small>L</small></strong></div>{% endfor %}
 </section>
 <div class="station">
 <section class="panel primary">{% include stage ~ '.jinja' %}</section>
